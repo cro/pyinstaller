@@ -546,6 +546,9 @@ def configure(ctx):
         #   -mmacosx-version-min=10.7
         os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.7'
 
+    elif ctx.env.DEST_OS == 'freebsd':
+        ctx.env.append_value('CPPPATH', '../zlib')
+
     ### Libraries
 
     if ctx.env.DEST_OS == 'win32':
@@ -749,7 +752,7 @@ def build(ctx):
         libs = ['DL', 'M', 'Z',  # 'z' - zlib, 'm' - math,
                 'THR']  # may be used on FreBSD
         staticlibs = []
-        if ctx.env.DEST_OS == 'aix':
+        if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
             # link statically with zlib, case sensitive
             libs.remove('Z')
             staticlibs.append('z')
