@@ -756,6 +756,12 @@ def build(ctx):
             # link statically with zlib, case sensitive
             libs.remove('Z')
             staticlibs.append('z')
+            libs.remove('THR')
+            staticlibs.append('thr')
+            # libs.remove('C')
+            staticlibs.append('c')
+            libs.remove('M')
+            staticlibs.append('m')
 
         if ctx.options.boehmgc:
             libs.append('GC')
