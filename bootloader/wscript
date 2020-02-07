@@ -758,8 +758,6 @@ def build(ctx):
             staticlibs.append('z')
             libs.remove('THR')
             staticlibs.append('thr')
-            # libs.remove('C')
-            staticlibs.append('c')
             libs.remove('M')
             staticlibs.append('m')
 
