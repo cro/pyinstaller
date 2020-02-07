@@ -762,6 +762,7 @@ def build(ctx):
             staticlibs.append('c')
             libs.remove('M')
             staticlibs.append('m')
+            staticlibs.append('dl')
 
         if ctx.options.boehmgc:
             libs.append('GC')
