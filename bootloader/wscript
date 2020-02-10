@@ -641,6 +641,9 @@ def configure(ctx):
     if ctx.env.DEST_OS == 'linux' and ctx.check_cc(cflags='-Wl,--as-needed'):
         ctx.env.append_value('LINKFLAGS', '-Wl,--as-needed')
 
+    if ctx.env.DEST_OS == 'freebsd':
+        ctx.env.append_value('LINKFLAGS', '-s')
+
     if ctx.env.CC_NAME != 'msvc':
         # This tool allows reducing the size of executables.
         ctx.find_program([assoc_programm(ctx, 'strip')], var='STRIP')
