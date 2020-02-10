@@ -546,8 +546,8 @@ def configure(ctx):
         #   -mmacosx-version-min=10.7
         os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.7'
 
-    elif ctx.env.DEST_OS == 'freebsd':
-        ctx.env.append_value('CPPPATH', '../zlib')
+#    elif ctx.env.DEST_OS == 'freebsd':
+#        ctx.env.append_value('CPPPATH', '../zlib')
 
     ### Libraries
 
@@ -728,8 +728,8 @@ def build(ctx):
 
     # By default strip final executables to make them smaller.
     features = 'strip'
-    if ctx.env.CC_NAME == 'msvc':
-        # Do not strip bootloaders when using MSVC.
+    if ctx.env.CC_NAME == 'msvc' or ctx.env.DEST_OS == 'freebsd':
+        # Do not strip bootloaders when using MSVC or freebsd and gcc.
         features = ''
 
     if ctx.env.DEST_OS == 'win32':
@@ -752,7 +752,8 @@ def build(ctx):
         libs = ['DL', 'M', 'Z',  # 'z' - zlib, 'm' - math,
                 'THR']  # may be used on FreBSD
         staticlibs = []
-        if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
+        # if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
+        if ctx.env.DEST_OS == 'aix':
             # link statically with zlib, case sensitive
             libs.remove('Z')
             staticlibs.append('z')
