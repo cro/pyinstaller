@@ -546,8 +546,8 @@ def configure(ctx):
         #   -mmacosx-version-min=10.7
         os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.7'
 
-#    elif ctx.env.DEST_OS == 'freebsd':
-#        ctx.env.append_value('CPPPATH', '../zlib')
+    elif ctx.env.DEST_OS == 'freebsd':
+        ctx.env.append_value('CPPPATH', '../zlib')
 
     ### Libraries
 
@@ -641,6 +641,7 @@ def configure(ctx):
     if ctx.env.DEST_OS == 'linux' and ctx.check_cc(cflags='-Wl,--as-needed'):
         ctx.env.append_value('LINKFLAGS', '-Wl,--as-needed')
 
+    # Add -s to link step so gcc will strip during link.
     if ctx.env.DEST_OS == 'freebsd':
         ctx.env.append_value('LINKFLAGS', '-s')
 
@@ -719,7 +720,7 @@ def build(ctx):
     if machine():
         install_path += '-' + machine()
 
-    if not ctx.env.LIB_Z:
+    if not ctx.env.LIB_Z or ctx.env.DEST_OS == 'freebsd':
         # If the operating system does not provide zlib, build our own. The
         # configure phase defines whether or not zlib is mandatory for a
         # platform.
@@ -733,6 +734,7 @@ def build(ctx):
     features = 'strip'
     if ctx.env.CC_NAME == 'msvc' or ctx.env.DEST_OS == 'freebsd':
         # Do not strip bootloaders when using MSVC or freebsd and gcc.
+        # Don't strip on freebsd because we'll have gcc do it.
         features = ''
 
     if ctx.env.DEST_OS == 'win32':
@@ -755,8 +757,7 @@ def build(ctx):
         libs = ['DL', 'M', 'Z',  # 'z' - zlib, 'm' - math,
                 'THR']  # may be used on FreBSD
         staticlibs = []
-        #if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
-        if ctx.env.DEST_OS == 'aix':
+        if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
             # link statically with zlib, case sensitive
             libs.remove('Z')
             staticlibs.append('z')
