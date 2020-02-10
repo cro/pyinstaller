@@ -755,7 +755,8 @@ def build(ctx):
         libs = ['DL', 'M', 'Z',  # 'z' - zlib, 'm' - math,
                 'THR']  # may be used on FreBSD
         staticlibs = []
-        if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
+        #if ctx.env.DEST_OS == 'aix' or ctx.env.DEST_OS == 'freebsd':
+        if ctx.env.DEST_OS == 'aix':
             # link statically with zlib, case sensitive
             libs.remove('Z')
             staticlibs.append('z')
