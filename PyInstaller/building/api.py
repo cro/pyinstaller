@@ -637,6 +637,7 @@ class EXE(Target):
             os.remove(item)
         logger.info("Building EXE from %s completed successfully.",
                     self.tocbasename)
+        breakpoint()
 
 
     def _copyfile(self, infile, outfile):
